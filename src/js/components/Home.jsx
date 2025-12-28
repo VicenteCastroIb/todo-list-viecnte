@@ -1,28 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+const TodoList = () => {
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState("");
 
-//create your first component
-const Home = () => {
-	return (
-		<div className="text-center">
-            
+  const addTask = (e) => {
+    if (e.key === "Enter" && task !== "") {
+      setTasks([...tasks, task]);
+      setTask("");
+    }
+  };
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const deleteTask = (index) => {
+    const newTasks = tasks.filter((item, i) => i !== index);
+    setTasks(newTasks);
+  };
+
+  return (
+    <div className="container">
+      <h1 className="text-center">Lista Tareas</h1>
+
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Agregar tarea"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        onKeyDown={addTask}
+      />
+
+      <ul className="list-group mt-3">
+        {tasks.length === 0 ? (
+          <li className="list-group-item text-muted">
+            No hay tareas, añadir tareas
+          </li>
+        ) : (
+          tasks.map((item, index) => (
+            <li key={index} className="list-group-item task">
+              {item}
+              <span
+                className="borrar"
+                onClick={() => deleteTask(index)}
+              >
+                ❌
+              </span>
+            </li>
+          ))
+        )}
+      </ul>
+
+      <div className="pendientes">
+        {tasks.length} tareas pendientes
+      </div>
+    </div>
+  );
 };
 
-export default Home;
+export default TodoList;
